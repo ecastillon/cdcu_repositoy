@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+$("#submit").click(function() {
+	
+	var action = $("#form_ing_socio").attr('action');
+	var form_data = {
+		nombres: $("#nombres").val(),
+		apellido_paterno: $("#apellido_paterno").val(),
+		apellido_materno: $("#apellido_materno").val(),
+		rut: $("#rut").val(),
+		direccion: $("#direccion").val(),
+		telefono_fijo: $("#telefono_fijo").val(),
+		celular: $("#celular").val(),
+		fecha_inscripcion: $("#fecha_inscripcion").val(),
+		email: $("#email").val(),
+		estado: $("#estado").val(),
+		fecha_nacimiento: $("#fecha_nacimiento").val(),
+		password: $("#password").val()
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == 'success') {
+				alert('Socio ingresado correctamente');
+				$("#form_ing_socio").each (function() {
+					this.reset();
+				});
+			}
+			else
+				alert('Error al ingresar socio');
+		}
+	});
+	
+	return false;
+});
+
+$(function() {
+	$("#fecha_inscripcion").datepicker();
+	$("#fecha_inscripcion").datepicker('option', {dateFormat: 'yy-mm-dd'});
+	$("#fecha_nacimiento").datepicker();
+	$("#fecha_nacimiento").datepicker('option', {dateFormat: 'yy-mm-dd'});
+});
+
+</script>
+
+</head>
+<body>
+
+<h2>Ingresar Socio</h2>
+
+<form action="ingresarSocio.php" method="post" id="form_ing_socio">
+	<ul>
+    	<li><label>Nombres</label><input type="text" name="nombres" id="nombres" size="50" maxlength="50" /></li>
+    	<li><label>Apellido Paterno</label><input type="text" name="apellido_paterno" id="apellido_paterno" size="50" maxlength="50" /></li>
+    	<li><label>Apellido Materno</label><input type="text" name="apellido_materno" id="apellido_materno" size="50" maxlength="50" /></li>
+        <li><label>Rut</label><input type="text" name="rut" id="rut" size="20" maxlength="10" /></li>
+        <li><label>Dirección</label><input type="text" name="direccion" id="direccion" size="100" maxlength="100" /></li>
+        <li><label>Teléfono fijo</label><input type="text" name="telefono_fijo" id="telefono_fijo" size="20" maxlength="20" /></li>
+        <li><label>Teléfono móvil</label><input type="text" name="celular" id="celular" size="20" maxlength="20" /></li>
+        <li><label>Fecha de inscripción</label><input type="text" id="fecha_inscripcion"></li>
+        <li><label>E-mail</label><input type="text" name="email" id="email" size="50" maxlength="50" /></li>
+        <li><label>Seleccione estado</label>
+            <select size="1" name="estado" id="estado">
+            	<option value="">Escoja un estado</option>
+            	<option value="0">Inactivo</option>
+            	<option value="1">Estado 1</option>
+            	<option value="2">Estado 2</option>
+            	<option value="3">Estado 3</option>
+            </select></li>
+        <li><label>Fecha de nacimiento</label><input type="text" id="fecha_nacimiento"></li>
+        <li><label>Contraseña</label><input type="password" name="password" id="password" size="32" maxlength="32" /></li>
+        <li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+
+</body>
+</html>

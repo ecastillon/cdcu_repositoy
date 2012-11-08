@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+$("#submit").click(function() {
+	
+	var action = $("#form_ing_usuario").attr('action');
+	var form_data = {
+		nombres: $("#nombres").val(),
+		apellidos: $("#apellidos").val(),
+		rut: $("#rut").val(),
+		password: $("#password_usuario").val(),
+		nivel_acceso: $("#nivel_acceso").val(),
+		is_ajax: 1
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == 'success')
+				alert('Usuario ingresado correctamente');
+			else
+				alert('Error al igresar usuario');	
+		}
+	});
+	
+	return false;
+});
+</script>
+
+</head>
+<body>
+
+<h2>Ingresar Usuario</h2>
+
+<form action="ingresarUsuario.php" method="post" id="form_ing_usuario">
+	<ul>
+    	<li><label>Nombres</label><input type="text" name="nombres" id="nombres" size="50" maxlength="50" /></li>
+    	<li><label>Apellidos</label><input type="text" name="apellidos" id="apellidos" size="50" maxlength="50" /></li>
+        <li><label>Rut</label><input type="text" name="rut" id="rut" size="20" maxlength="10" /></li>
+        <li><label>Contraseña</label><input type="password" name="password" id="password_usuario" size="32" maxlength="32" /></li>
+        <li>
+        	<label>Nivel de acceso</label>
+            <select size="1" name="nivel_acceso" id="nivel_acceso">
+            	<option value="">Escoja una opción</option>
+            	<option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </li>
+        <li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+
+</body>
+</html>

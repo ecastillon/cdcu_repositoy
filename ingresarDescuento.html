@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	
+	var socios
+	var tarjeta
+	
+	$.post("getSocios.php", function(data) {
+		socios = $.parseJSON(data);
+		for(var i = 0; i < socios.length; i++) {
+			$("#socio > option:last").after("<option value='"+socios[i].id_socio+"'>"+socios[i].nombres+" "+socios[i].apellido_paterno+" "+socios[i].apellido_materno+"</option>");
+		}
+	});
+			$.post("getTarjetasActivas.php", {id_socio: ("#socio").val()}, function(data_desc) {
+		tarjeta = $.parseJSON(data_desc);
+		$("#motivo > option:last").after("<input name='id_tarjeta' id='id_tarjeta' type='hidden' value='"+tarjeta[0].id_tarjeta+"' />");
+		});
+
+	
+	$("#submit").click(function() {		
+		var action = $("#form_ing_descuento").attr('action');
+		var form_data = {
+			descuento: $("#descuento").val(),
+			id_tarjeta: $("#id_tarjeta").val(),
+			motivo: $("#motivo").val(),
+			};
+					
+		$.ajax({
+			type: "POST",
+			url: action,
+			data: form_data,
+			success: function(response)
+			{
+				if(response == "success") {
+					alert("Descuento ingresado correctamente");
+					$("#form_ing_descuento").each (function() {
+						this.reset();
+					});
+				}
+				else
+					alert("Error al ingresar descuento");
+			}
+		});
+		
+		return false;
+	});
+	
+});
+</script>
+</head>
+
+<body>
+<h2>Ingresar Descuento Personal</h2>
+<form action="ingresarDescuentoPersonal.php" method="post" id="form_ing_descuento">
+	<ul>
+    	<li><label>Seleccione socio</label>
+            <select size="1" name="socio" id="socio">
+            	<option value="">Escoja un socio</option>
+            </select></li>
+        <li><label>Descuento Porcentual</label><input type="text" name="descuento" id="descuento" size="10" maxlength="50" /></li>
+        <li><label>Motivo</label><textarea name="motivo" id="motivo" rows="4" cols="60" ></textarea></li>
+    	<li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+        <input name="id_tarjeta" type="hidden" value="" />
+    </ul>
+</form>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<script>
+	$(function() {
+		$("#datepicker").datepicker();
+		$('#datepicker').datepicker('option', {dateFormat: 'yy-mm-dd'});
+	});
+	
+	$("#submit").click(function() {	
+	var action = $("#form_ing_plan").attr('action');
+	var form_data = {
+		nombre: $("#nombre_localidad").val(),
+		agrupacion: $("#agrupacion").val(),
+		valor: $("#valor").val(),
+		fecha: $("#datepicker").val()
+		};
+		
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == "success") {
+				alert("Plan ingresado correctamente");
+				$("#form_ing_plan").each (function() {
+					this.reset();
+				});
+				$('input[name="agrupacion"]').attr('checked', false);
+			}
+			else
+				alert("Error al ingresar plan");
+		}
+	});
+	
+	return false;
+});
+	</script>
+</head>
+<body>
+
+<h2>Ingresar Plan</h2>
+
+<form action="ingresarPlan.php" method="post" id="form_ing_plan">
+	<table>
+    	<tr>
+      		<td align="right">Galeria</td>
+        	<td><input name="nombre_localidad" id="nombre_localidad" type="radio" value="Galeria"  align="right"/></td>
+            <td align="right">Particular</td>
+        	<td><input name="agrupacion" id="agrupacion" type="radio" value="Particular"  align="right"/></td>            
+		</tr>
+    	<tr>
+      		<td align="right">Marquesina</td>
+        	<td><input name="nombre_localidad" id="nombre_localidad" type="radio" value="Marquesina"  align="right"/></td>
+			<td align="right">Familiar</td>
+        	<td><input name="agrupacion" id="agrupacion" type="radio" value="Familiar"  align="right"/></td>            
+
+		</tr>
+        <tr>
+      		<td align="right">Tribuna Alta</td>
+        	<td><input name="nombre_localidad" id="nombre_localidad" type="radio" value="Tribuna Alta"  align="right"/></td>
+		</tr>
+        <tr>
+      		<td align="right">Tribuna Baja</td>
+        	<td><input name="nombre_localidad" id="nombre_localidad" type="radio" value="Tribuna Baja"  align="right"/></td>
+		</tr>
+        <tr>
+      		<td align="right">Vip</td>
+        	<td><input name="nombre_localidad" id="nombre_localidad" type="radio" value="Vip"  align="right"/></td>
+		</tr>
+	</table>
+    <ul>
+    	<p>&nbsp;</p>
+    	<li><label>Valor</label>$<input type="text" name="valor" id="valor" size="10" maxlength="10" /></li>
+        <li><label>Fecha</label><input type="text" name="fecha" id="datepicker"></li>
+        <li><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+</body>
+</html>

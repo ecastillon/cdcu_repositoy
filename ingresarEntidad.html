@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+
+$("#submit").click(function() {
+	
+	var action = $("#form_ing_ent").attr('action');
+	var form_data = {
+		nombre: $("#nombre").val(),
+		fono: $("#fono").val(),
+		direccion: $("#direccion").val(),
+		email: $("#email").val(),
+		tipo: $("#tipo").val(),
+		titular: $("#titular").val()
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == "success") {
+				alert("Entidad ingresada correctamente");
+				$("#form_ing_ent").each (function() {
+					this.reset();
+				});
+			}
+			else
+				alert("Error al ingresar localidad");
+		}
+	});
+	
+	return false;
+});
+</script>
+
+</head>
+<body>
+
+<h2>Ingresar Entidad</h2>
+<form action="ingresarEntidad.php" method="post" id="form_ing_ent">
+	<ul>
+    	<li><label>Nombre</label><input type="text" name="nombre" id="nombre" size="50" maxlength="50" /></li>
+        <li><label>Fono</label><input type="text" name="fono" id="fono" size="50" maxlength="50" /></li>
+        <li><label>Direccion</label><input type="text" name="direccion" id="direccion" size="50" maxlength="50" /></li>
+        <li><label>Email</label><input type="text" name="email" id="email" size="50" maxlength="50" /></li>
+        <li><label>Tipo de Entidad</label><input type="text" name="tipo" id="tipo" size="50" maxlength="50" /></li>
+        <li><label>Socio Titular</label><input type="text" name="titular" id="titular" size="50" maxlength="50" /></li>
+    	<li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+
+</body>
+</html>

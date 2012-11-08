@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	$.ajax({
+		type: "POST",
+		url: "consultarLocalidades.php",
+		success: function(result)
+		{
+			$("#localidades").html(result);
+		}
+	});
+	
+});
+
+$("#submit").click(function() {
+	
+	var action = $("#form_ing_loc").attr('action');
+	var form_data = {
+		nombre: $("#nombre").val()
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == "success") {
+				alert("Localidad ingresada correctamente");
+				$("#localidades").append("<p>" + $("#nombre").val() + "</p>");
+				$("#form_ing_loc").each (function() {
+					this.reset();
+				});
+			}
+			else
+				alert("Error al ingresar localidad");
+		}
+	});
+	
+	return false;
+});
+</script>
+
+</head>
+<body>
+
+<h2>Ingresar Localidad</h2>
+
+<ul>
+	<li>
+		<label>Localidades existentes</label>
+		<div id="localidades">
+			<p>Recuperando localidades...</p>
+		</div>
+	</li>
+</ul>
+
+<form action="ingresarLocalidad.php" method="post" id="form_ing_loc">
+	<ul>
+    	<li><label>Nombre</label><input type="text" name="nombre" id="nombre" size="50" maxlength="50" /></li>
+    	<li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+
+</body>
+</html>

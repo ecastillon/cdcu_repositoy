@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	
+	var socios;
+	var planes;
+	var asientos;
+	
+	$.post("getSocios.php", function(data) {
+		socios = $.parseJSON(data);
+		for(var i = 0; i < socios.length; i++) {
+			$("#socio > option:last").after("<option value='"+socios[i].id_socio+"'>"+socios[i].nombres+" "+socios[i].apellido_paterno+" "+socios[i].apellido_materno+"</option>");
+		}
+	});
+	
+	$.post("getPlanes.php", function(data) {
+		planes = $.parseJSON(data);
+		for(var i = 0; i < planes.length; i++) {
+			$("#plan > option:last").after("<option value='"+planes[i].id_plan+"'>"+planes[i].nombre_plan+"</option>");
+		}
+	});
+	
+	$.post("getAsientos.php", function(data) {
+		asientos = $.parseJSON(data);
+		for(var i = 0; i < asientos.length; i++) {
+			var localidad;
+			$.post("getLocalidades.php", {id: asientos[i].id_localidad}, function(data_loc) {
+				localidad = $.parseJSON(data_loc);
+				$("#asiento > option:last").after("<option value='"+asientos[i].id_asiento+"'>Localidad: "+localidad.nombre+" Fila: "+asientos[i].fila+" Columna: "+asientos[i].columna+"</option>");
+			});
+			alert(localidad.nombre);
+		}
+	});
+	
+	$("#submit").click(function() {
+		
+		var action = $("#form_ing_tarj").attr('action');
+		var form_data = {
+			asiento: $("#asiento").val(),
+			socio: $("#socio").val(),
+			estado: $("#estado").val(),
+			plan: $("#plan").val()
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: action,
+			data: form_data,
+			success: function(response)
+			{
+				if(response == "success") {
+					alert("Tarjeta ingresada correctamente");
+					$("#form_ing_tarj").each (function() {
+						this.reset();
+					});
+				}
+				else
+					alert("Error al ingresar tarjeta");
+			}
+		});
+		
+		return false;
+	});
+	
+});
+</script>
+
+</head>
+<body>
+
+<h2>Ingresar Tarjeta</h2>
+<form action="ingresarTarjeta.php" method="post" id="form_ing_tarj">
+	<ul>
+    	<li><label>Seleccione socio</label>
+            <select size="1" name="socio" id="socio">
+            	<option value="">Escoja un socio</option>
+            </select></li>
+        <li><label>Seleccione Plan</label>
+            <select size="1" name="plan" id="plan">
+            	<option value="">Escoja un plan</option>
+            </select></li>
+        <li><label>Seleccione Asiento</label>
+            <select size="1" name="asiento" id="asiento">
+            	<option value="">Escoja un asiento</option>
+            </select></li>
+        <li><label>Seleccione estado</label>
+            <select size="1" name="estado" id="estado">
+            	<option value="">Escoja un estado</option>
+            	<option value="0">Inactivo</option>
+            	<option value="1">Estado 1</option>
+            	<option value="2">Estado 2</option>
+            	<option value="3">Estado 3</option>
+            </select></li>
+    	<li><label></label><input type="submit" name="submit" id="submit" value="Ingresar" /></li>
+    </ul>
+</form>
+
+</body>
+</html>

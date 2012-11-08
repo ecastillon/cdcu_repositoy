@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript">
+$("#submit").click(function() {
+	
+	var action = $("#form_ing_pago").attr('action');
+	var form_data = {
+		fecha: $("#fecha").val(),
+		valor: $("#valor").val(),
+		forma_pago: $("#forma_pago").val(),
+		nro_doc: $("#nro_doc").val(),
+		banco: $("#banco").val(),
+		fecha_doc: $("#fecha_doc").val(),
+		nro_comprobante: $("#nro_comprobante").val(),
+		is_ajax: 1
+	};
+	
+	$.ajax({
+		type: "POST",
+		url: action,
+		data: form_data,
+		success: function(response)
+		{
+			if(response == 'success')
+				alert('Usuario ingresado correctamente');
+			else
+				alert('Error al igresar usuario');	
+		}
+	});
+	
+	return false;
+});
+</script>
